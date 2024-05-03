@@ -1,5 +1,7 @@
 const removeAds = () => {
-  var skipBtn = document.querySelector("button.ytp-ad-skip-button");
+  var skipBtn = (skipBtn = document.querySelector(
+    "button[class*='ytp-ad-skip']"
+  ));
   if (skipBtn) skipBtn.click();
   var ad = document.querySelector(".ytp-ad-player-overlay");
   if (ad) {
