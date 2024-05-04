@@ -1,18 +1,23 @@
 const removeAds = () => {
   var ad = document.querySelector(".ytp-ad-player-overlay");
-  var skipBtn =
-    document.querySelector("button[class*='ytp-ad-skip']") ||
-    (ad && ad.getElementsByTagName("button")[0]);
+  var skipBtn = document.querySelector("button[class*='ytp-ad-skip']");
+
+  if (!skipBtn) {
+    skipBtn = ad && ad.querySelector("button[class*='ytp-button']");
+  }
+
   if (skipBtn) {
     skipBtn.click();
   }
+
   if (ad) {
-    var video = document.querySelector("video");
+    var video = ad.querySelector("video");
     if (video) {
-      video.currentTime = video.duration;
-    }
-    if (skipBtn) {
-      skipBtn.click();
+      video.onloadedmetadata = function () {
+        if (!isNaN(video.duration) && isFinite(video.duration)) {
+          video.currentTime = video.duration;
+        }
+      };
     }
   }
 };
