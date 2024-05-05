@@ -1,24 +1,37 @@
-const removeAds = () => {
-  var ad = document.querySelector(".ytp-ad-player-overlay");
+const clickSkip = (ad) => {
   var skipBtn = document.querySelector("button[class*='ytp-ad-skip']");
-
   if (!skipBtn) {
     skipBtn = ad && ad.querySelector("button[class*='ytp-button']");
   }
-
   if (skipBtn) {
     skipBtn.click();
   }
+};
 
+const skipVideo = (ad) => {
+  if (!ad) {
+    return;
+  }
+  var video = ad.querySelector("video");
+  if (video) {
+    video.onloadedmetadata = function () {
+      if (!isNaN(video.duration) && isFinite(video.duration)) {
+        video.currentTime = video.duration;
+      }
+    };
+  }
+};
+
+const removeAds = () => {
+  var ad = document.querySelector(".ytp-ad-player-overlay");
   if (ad) {
-    var video = ad.querySelector("video");
-    if (video) {
-      video.onloadedmetadata = function () {
-        if (!isNaN(video.duration) && isFinite(video.duration)) {
-          video.currentTime = video.duration;
-        }
-      };
-    }
+    skipVideo(ad);
+    clickSkip(ad);
+    return;
+  }
+  ad = document.querySelector(".ad-showing");
+  if (ad) {
+    skipVideo();
   }
 };
 removeAds();
